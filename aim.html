@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Virtual Labs | Adaptive signal processing - Aim</title>
-  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <title>Virtual Labs | Image Processing Lab - Aim</title>
+  <meta content="width=device-width, initial-scale=1" name="viewport">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="./alert-theme.css">
 
@@ -23,15 +23,26 @@
       --intro-border-highlight: rgba(11, 96, 168, 0.16);
       --intro-text-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(232, 245, 255, 0.7));
       --intro-video-bg: linear-gradient(150deg, #0b1224 0%, #2b1a10 100%);
+      --intro-shell-max-width: 1120px;
+      --intro-shell-max-height: calc(100dvh - 1.5rem);
+      --intro-shell-radius: clamp(1rem, 2.2vw, 1.6rem);
+      --intro-shell-padding: clamp(0.95rem, 2vw, 1.5rem);
     }
 
     body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
+    #page-wrapper {
+      transition: opacity 180ms ease, transform 220ms ease;
+      transform-origin: center top;
+    }
+
     /* Page blur when intro popup is open */
     body.body-blurred #page-wrapper {
-      filter: blur(5px);
+      opacity: 0.3;
+      transform: scale(0.992);
       pointer-events: none;
-      user-select: none;    }
+      user-select: none;
+    }
 
     body.body-blurred { overflow: hidden; }
 
@@ -86,13 +97,13 @@
     }
 
     @keyframes intro-panel-3d {
-      from { opacity: 0; transform: translateY(28px) scale(0.96) rotateX(8deg) rotateY(-6deg); }
-      to { opacity: 1; transform: translateY(0) scale(1) rotateX(0) rotateY(0); }
+      from { opacity: 0; transform: translateY(18px) scale(0.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     @keyframes intro-panel-rise {
-      from { opacity: 0; transform: translateY(16px) translateZ(10px); }
-      to { opacity: 1; transform: translateY(0) translateZ(10px); }
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes intro-item-in {
@@ -335,8 +346,8 @@
       opacity: 1;
       transition: opacity 160ms ease, transform 160ms ease;
       animation: intro-line-in 0.35s ease-out both;
-      font-size: 1.05rem;
-      max-width: 720px;
+      font-size: clamp(0.95rem, 0.18vw + 0.92rem, 1.05rem);
+      max-width: 68ch;
       margin-left: auto;
       margin-right: auto;
       text-align: left;
@@ -362,6 +373,7 @@
       gap: 0.45rem;
       min-height: 0;
       overflow-y: auto;
+      scrollbar-gutter: stable;
     }
 
     .outline-item {
@@ -428,37 +440,37 @@
     }
 
     #intro-video-wrapper {
-      width: 100%;
+      width: min(100%, 720px);
       background: var(--intro-video-bg);
-      border: 1px solid rgba(11, 96, 168, 0.3);
-      border-radius: 20px;
-      box-shadow:
-        0 35px 70px rgba(2, 12, 32, 0.45),
-        0 0 30px rgba(14, 165, 233, 0.25);
+      border: 1px solid rgba(11, 96, 168, 0.22);
+      border-radius: 18px;
+      box-shadow: 0 20px 42px rgba(2, 12, 32, 0.28);
       overflow: hidden;
-      min-height: 220px;
-      max-height: 360px;
       aspect-ratio: 16 / 9;
+      min-height: 0;
+      max-height: min(32vh, 320px);
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: opacity 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      transition: opacity 180ms ease, transform 180ms ease, box-shadow 180ms ease;
       position: relative;
       isolation: isolate;
       z-index: 1;
+      margin: 0 auto;
+      contain: layout paint;
     }
 
     #intro-video-wrapper::before {
       content: '';
       position: absolute;
-      inset: 8px;
-      border-radius: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.4);
+      inset: 6px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
       pointer-events: none;
     }
 
-    #intro-video-wrapper:not(.hidden) { opacity: 1; transform: scale(1); }
-    #intro-video-wrapper.hidden { opacity: 0; transform: scale(0.95); }
+    #intro-video-wrapper:not(.hidden) { display: flex; opacity: 1; transform: translateY(0); }
+    #intro-video-wrapper.hidden { display: none; opacity: 0; transform: translateY(8px); pointer-events: none; }
 
     #intro-video {
       width: 100%;
@@ -466,16 +478,14 @@
       object-fit: contain;
       background: #0b1224;
       image-rendering: auto;
-      image-rendering: -webkit-optimize-contrast;
-      image-rendering: crisp-edges;
-      border-radius: 16px;
+      border-radius: 14px;
       display: block;
       filter: none;
     }
 
     .body-blurred #intro-video-wrapper {
-      animation: intro-video-pop 0.6s ease-out both;
-      animation-delay: 0.15s;
+      animation: intro-video-pop 0.38s ease-out both;
+      animation-delay: 0.08s;
     }
 
     /* Hide native video controls */
@@ -680,12 +690,12 @@
     #intro-modal { z-index: 9999 !important; }
     #intro-modal button { position: relative; z-index: 10000 !important; }
 
-    @media (prefers-reduced-motion: no-preference) {
+    @media (prefers-reduced-motion: no-preference) and (min-width: 1200px) and (min-height: 820px) {
       #intro-right { animation: intro-pane-tilt 12s ease-in-out infinite; }
       #intro-video-wrapper:not(.hidden) { animation: intro-video-glow 9s ease-in-out infinite; }
     }
 
-    @media (prefers-reduced-motion: reduce) {
+    @media (prefers-reduced-motion: reduce), (max-width: 1199px), (max-height: 819px) {
       #intro-right,
       #intro-video-wrapper { animation: none !important; }
     }
@@ -709,6 +719,18 @@
       gap: 0.9rem;
       z-index: 90;
       max-width: calc(100vw - 32px);
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+
+    body.sidebar-open .chatbot-widget {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(12px);
+    }
+
+    @media (max-width: 1023px) {
+      #sidebar { z-index: 120 !important; }
+      #overlay { z-index: 110 !important; }
     }
 
     .chatbot-widget.chatbot-open .chatbot-hint-bubble,
@@ -815,16 +837,14 @@
 
     /* Intro Modal Improvements */
     #intro-modal {
-      padding: clamp(0.75rem, 3vw, 1.5rem);
+      padding: clamp(0.5rem, 2vw, 1.25rem);
       box-sizing: border-box;
-      backdrop-filter: blur(16px) saturate(1.2);
       background:
-        radial-gradient(circle at 20% 20%, rgba(11, 96, 168, 0.25), transparent 40%),
-        radial-gradient(circle at 80% 20%, rgba(14, 165, 233, 0.25), transparent 45%),
-        rgba(0, 0, 0, 0.55);
-      perspective: 1200px;
-      perspective-origin: center top;
+        radial-gradient(circle at 16% 18%, rgba(11, 96, 168, 0.16), transparent 34%),
+        radial-gradient(circle at 84% 16%, rgba(14, 165, 233, 0.14), transparent 38%),
+        rgba(2, 12, 24, 0.78);
       overflow-y: auto;
+      overscroll-behavior: contain;
     }
 
     .body-blurred #intro-modal {
@@ -833,28 +853,27 @@
 
     #intro-modal .modal-container {
       position: relative;
-      width: min(1080px, calc(100vw - 1.5rem));
-      max-width: 1180px;
-      max-height: min(88vh, 940px);
-      padding: clamp(1.1rem, 2.5vw, 1.75rem);
-      display: flex;
-      flex-direction: column;
+      width: min(var(--intro-shell-max-width), calc(100vw - 1rem));
+      max-height: var(--intro-shell-max-height);
+      min-height: min(700px, calc(100dvh - 1.5rem));
+      padding: var(--intro-shell-padding);
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      gap: clamp(0.75rem, 1.6vw, 1rem);
       overflow: hidden;
-      border-radius: 1.8rem;
+      border-radius: var(--intro-shell-radius);
       border: 1px solid var(--intro-panel-border);
       box-sizing: border-box;
       background:
-        radial-gradient(120% 140% at 10% 10%, rgba(11, 96, 168, 0.18), transparent 60%),
+        radial-gradient(120% 140% at 10% 10%, rgba(11, 96, 168, 0.12), transparent 60%),
         var(--intro-panel-gradient);
       box-shadow:
-        0 35px 80px rgba(4, 24, 46, 0.35),
-        0 0 0 1px rgba(255, 255, 255, 0.5),
+        0 22px 60px rgba(4, 24, 46, 0.28),
+        0 0 0 1px rgba(255, 255, 255, 0.45),
         inset 0 1px 0 rgba(255, 255, 255, 0.7);
       isolation: isolate;
-      transform-style: preserve-3d;
-      backface-visibility: hidden;
-      will-change: transform;
       margin: 0 auto;
+      contain: layout paint;
     }
 
     .body-blurred #intro-modal .modal-container {
@@ -864,11 +883,10 @@
     .intro-header {
       display: flex;
       flex-direction: column;
-      gap: 0.35rem;
-      padding: 1.15rem 1.5rem 0;
+      gap: 0.45rem;
+      padding: 0.25rem 0.35rem 0;
       position: relative;
       z-index: 1;
-      transform: translateZ(18px);
     }
 
     .intro-title-row {
@@ -881,7 +899,7 @@
     .intro-title-chip {
       text-transform: uppercase;
       font-size: 0.7rem;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.16em;
       padding: 0.25rem 0.7rem;
       border-radius: 999px;
       background: linear-gradient(140deg, #dbeafe, #bfdbfe);
@@ -901,18 +919,17 @@
         radial-gradient(circle at 70% 70%, rgba(14, 165, 233, 0.18), transparent 38%);
       filter: blur(40px);
       z-index: -1;
-      animation: intro-grid-shimmer 14s linear infinite;
       background-size: 200% 200%;
+      opacity: 0.55;
     }
 
     #intro-modal .modal-container::after {
       inset: -10%;
-      opacity: 0.35;
-      animation-direction: reverse;
+      opacity: 0.2;
     }
 
     #intro-modal h3 {
-      font-size: 1.55rem;
+      font-size: clamp(1.15rem, 1.2vw + 0.95rem, 1.55rem);
       font-weight: 700;
       color: var(--lab-ink);
       margin: 0;
@@ -928,7 +945,7 @@
 
     .intro-subtitle {
       color: var(--lab-muted);
-      font-size: 0.95rem;
+      font-size: clamp(0.88rem, 0.35vw + 0.8rem, 0.95rem);
       margin: 0;
       max-width: 680px;
     }
@@ -954,26 +971,27 @@
 
     #intro-grid {
       position: relative;
-      gap: clamp(0.85rem, 2vw, 1.15rem);
+      display: grid;
+      grid-template-columns: minmax(240px, 0.42fr) minmax(0, 1fr);
+      align-items: stretch;
+      gap: clamp(0.85rem, 1.6vw, 1rem);
       min-height: 0;
-      width: min(100%, 1080px);
-      max-width: 1080px;
-      margin: 0 auto;
-      padding-top: 1rem;
-      padding-inline: clamp(0.35rem, 1.4vw, 0.85rem);
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      padding: 0.2rem;
       box-sizing: border-box;
-      transform-style: preserve-3d;
       z-index: 1;
+      overflow: hidden;
     }
 
     #intro-grid::before {
       content: '';
       position: absolute;
-      inset: 0.35rem;
-      border-radius: 1.35rem;
+      inset: 0;
+      border-radius: 1.15rem;
       background: linear-gradient(120deg, rgba(11, 96, 168, 0.06), rgba(14, 165, 233, 0.05), rgba(11, 96, 168, 0.06));
       background-size: 200% 200%;
-      animation: intro-grid-shimmer 20s linear infinite;
       z-index: -1;
       pointer-events: none;
     }
@@ -985,12 +1003,12 @@
 
     #intro-left {
       background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-      padding: 0.8rem;
+      padding: 0.35rem;
       border-radius: 1rem;
       display: flex;
       flex-direction: column;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 16px 32px rgba(4, 24, 46, 0.12);
-      transform: perspective(1200px) translateZ(6px);
+      min-height: 0;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 12px 26px rgba(4, 24, 46, 0.1);
     }
 
     #intro-left .intro-left-card {
@@ -998,16 +1016,16 @@
       display: flex;
       flex-direction: column;
       gap: 0.7rem;
-      padding: 1.05rem;
+      min-height: 0;
+      padding: 1rem;
       border: 1px solid #e0e7f1;
       background: linear-gradient(150deg, #ffffff 0%, #f5f8ff 100%);
       box-shadow:
-        0 18px 36px rgba(15, 23, 42, 0.14),
-        0 10px 22px rgba(11, 96, 168, 0.08);
+        0 14px 30px rgba(15, 23, 42, 0.12),
+        0 8px 18px rgba(11, 96, 168, 0.06);
       border-radius: 16px;
       overflow: hidden;
       position: relative;
-      backdrop-filter: blur(6px);
     }
 
     #intro-left .intro-left-card::after {
@@ -1059,39 +1077,39 @@
 
     #intro-right {
       display: grid;
-      grid-template-rows: auto auto;
-      gap: 1.2rem;
+      grid-template-rows: minmax(0, 1fr) auto;
+      gap: clamp(0.75rem, 1.6vw, 1rem);
       width: 100%;
+      min-height: 0;
       position: relative;
-      transform-style: preserve-3d;
-      perspective: 1400px;
-      padding: 0.4rem 0.6rem 0.8rem;
+      padding: clamp(0.7rem, 1.4vw, 0.95rem);
       background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(243, 247, 255, 0.92));
-      border-radius: 1.4rem;
+      border-radius: 1.2rem;
       border: 1px solid rgba(14, 165, 233, 0.15);
-      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12),
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.12),
         inset 0 1px 0 rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(6px);
     }
 
     #intro-text {
-      min-height: 180px;
-      max-height: 260px;
-      padding: 1.2rem 1.15rem;
-      font-size: 1.1rem;
-      line-height: 1.7;
+      min-height: clamp(150px, 24vh, 240px);
+      height: 100%;
+      padding: clamp(0.95rem, 1.5vw, 1.2rem);
+      font-size: clamp(0.98rem, 0.35vw + 0.92rem, 1.08rem);
+      line-height: 1.65;
       color: var(--lab-ink);
       letter-spacing: 0.01em;
       border: 1px solid rgba(11, 96, 168, 0.2);
       background: var(--intro-text-bg);
       overflow-y: auto;
+      scrollbar-gutter: stable;
       border-radius: 18px;
       box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.8),
-        0 20px 45px rgba(15, 23, 42, 0.12);
+        0 14px 30px rgba(15, 23, 42, 0.1);
       position: relative;
       z-index: 2;
       margin-bottom: 0;
+      contain: layout paint;
     }
 
     #intro-text::before {
@@ -1105,11 +1123,10 @@
     }
 
     #intro-modal .controls {
-      margin-top: 1.25rem;
-      gap: 1rem;
-      padding: 1rem 1.5rem 1.4rem;
+      margin-top: 0;
+      gap: 0.75rem;
+      padding: 0.35rem 0.25rem 0;
       border-top: 1px solid rgba(120, 72, 40, 0.2);
-      transform: translateZ(16px);
     }
 
     #intro-play,
@@ -1122,6 +1139,7 @@
       padding: 0.75rem 1.5rem;
       border-radius: 0.75rem;
       font-weight: 600;
+      min-height: 44px;
       transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
     }
 
@@ -1133,24 +1151,184 @@
       box-shadow: 0 16px 26px rgba(2, 26, 44, 0.35);
     }
 
-    @media (max-width: 640px) {
-      #intro-modal { padding: 0.75rem; }
+    @media (min-width: 1200px) and (min-height: 820px) {
+      #intro-modal .modal-container::before,
+      #intro-modal .modal-container::after,
+      #intro-grid::before {
+        animation: intro-grid-shimmer 18s linear infinite;
+      }
+
+      #intro-modal .modal-container::after {
+        animation-direction: reverse;
+      }
+    }
+
+    @media (max-width: 1024px) {
       #intro-modal .modal-container {
         width: calc(100vw - 1rem);
-        max-height: calc(100vh - 1.5rem);
-        padding: 1rem;
+        min-height: auto;
+        max-height: calc(100dvh - 1rem);
+      }
+
+      #intro-grid {
+        grid-template-columns: 1fr;
+        overflow-y: auto;
+        padding-right: 0.1rem;
+      }
+
+      #intro-left,
+      #intro-right {
+        transform: none;
+      }
+
+      #intro-left .intro-left-card {
+        max-height: min(240px, 30vh);
+      }
+
+      #intro-outline {
+        max-height: min(150px, 20vh);
+      }
+
+      #intro-video-wrapper {
+        width: 100%;
+        max-width: 680px;
+        max-height: min(30vh, 300px);
+      }
+    }
+
+    @media (max-height: 820px) {
+      #intro-modal {
+        padding: 0.5rem;
+      }
+
+      #intro-modal .modal-container {
+        min-height: auto;
+        max-height: calc(100dvh - 1rem);
+        gap: 0.75rem;
+      }
+
+      .intro-header {
+        padding: 0.2rem 0.2rem 0;
+      }
+
+      #intro-grid {
+        gap: 0.75rem;
+      }
+
+      #intro-left .intro-left-card {
+        padding: 0.85rem;
+      }
+
+      #intro-right {
+        padding: 0.75rem;
+      }
+
+      #intro-text {
+        min-height: 140px;
+        font-size: 1rem;
+      }
+
+      #intro-video-wrapper {
+        max-height: min(26vh, 240px);
+      }
+
+      #intro-modal .controls {
+        padding-top: 0.5rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      #intro-modal { padding: 0.5rem; }
+      #intro-modal .modal-container {
+        width: calc(100vw - 0.5rem);
+        max-height: calc(100dvh - 0.5rem);
+        padding: 0.85rem;
         border-radius: 1rem;
         box-sizing: border-box;
       }
 
-      #intro-grid { padding-inline: 0.35rem; max-width: 100%; }
-      #intro-right { grid-template-rows: auto auto; }
-      #intro-video-wrapper { min-height: 180px; max-height: 260px; }
-      #intro-text { font-size: 1rem; min-height: 160px; }
+      .intro-header {
+        padding: 0.1rem 0.1rem 0;
+      }
+
+      #intro-modal h3 {
+        font-size: 1.15rem;
+      }
+
+      .intro-subtitle {
+        font-size: 0.88rem;
+      }
+
+      #intro-grid {
+        padding: 0;
+      }
+
+      #intro-left {
+        padding: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      #intro-left .intro-left-card {
+        max-height: none;
+      }
+
+      #intro-outline {
+        max-height: 140px;
+      }
+
+      #intro-right {
+        padding: 0.65rem;
+      }
+
+      #intro-text {
+        min-height: 150px;
+        padding: 0.9rem;
+      }
+
+      #intro-video-wrapper {
+        max-height: min(28vh, 220px);
+        border-radius: 16px;
+      }
+
+      #intro-modal .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      #intro-play,
+      #intro-pause,
+      #intro-skip {
+        width: 100%;
+        justify-content: center;
+      }
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 420px) {
+      #intro-modal .modal-container {
+        padding: 0.75rem;
+      }
+
+      .intro-title-row {
+        gap: 0.5rem;
+      }
+
+      .intro-title-chip {
+        font-size: 0.62rem;
+        letter-spacing: 0.14em;
+      }
+
+      #intro-modal h3 {
+        font-size: 1.05rem;
+      }
+
+      #intro-text .intro-line {
+        font-size: 0.95rem;
+      }
+
       .chatbot-panel { height: min(88vh, 620px); }
+
+      
     }
   </style>
 </head>
@@ -1161,7 +1339,7 @@
   <div id="page-wrapper">
 
     <!-- Header -->
-    <header class="vl-header shadow-xl fixed top-0 left-0 right-0 z-50">
+    <header class="vl-header shadow-xl fixed top-0 left-0 right-0 z-[1000]">
       <div class="header-inner px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between py-1 w-full gap-3">
           <a href="../../main.html" class="logo-container hover:no-underline focus:no-underline">
@@ -1181,6 +1359,8 @@
             id="mobile-menu-toggle"
             class="lg:hidden text-white p-2 menu-button"
             aria-label="Toggle menu"
+            aria-controls="sidebar"
+            aria-expanded="false"
           >
             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -1200,9 +1380,9 @@
       </div>
     </header>
 
-    <div class="flex pt-16 min-h-screen">
+    <div class="flex pt-[70px] min-h-screen">
       <!-- Sidebar -->
-      <aside id="sidebar" class="vl-sidebar w-64 fixed inset-y-0 left-0 z-40 overflow-y-auto transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out pt-20 lg:pt-6 pb-6">
+      <aside id="sidebar" class="vl-sidebar w-64 fixed left-0 top-[70px] bottom-12 z-[999] overflow-y-auto transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out pb-6">
         <div class="px-4">
           <h2 class="text-lg font-semibold text-gray-800 mb-6 border-b border-gray-200 pb-4">Experiment Navigation</h2>
           <nav class="space-y-1">
@@ -1286,22 +1466,31 @@
       <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden hidden"></div>
 
       <!-- Main Content -->
-      <main class="flex-1 lg:ml-64 p-4 lg:p-8">
-        <nav class="mb-6 text-m text-gray-600 animate-slideInLeft flex items-center space-x-2">
-          <a href="../../main.html" class="hover:text-blue-600 transition-colors">Home</a>
-          <span>></span>
-          <a href="#" class="hover:text-blue-600">AI-Enhanced Adaptive Signal Processing Lab</a>
-          <span>></span>To simulate RLS and LMS algorithms on real bio-signal data
-          <span class="text-gray-800 font-medium"></span>
-        </nav>
+   <main class="flex-1 lg:ml-64 p-4 lg:p-6 overflow-x-hidden">
 
-        <div class="vl-card mb-4 overflow-hidden animate-fadeInUp rounded-lg">
-          <div class="px-4 py-3" style="background: linear-gradient(120deg, #021a2c, #064073, #0b60a8);">
-            <h1 class="text-lg md:text-xl font-bold text-white text-center leading-snug">
-              To simulate RLS and LMS algorithms on Simulated and real bio-signal data
-            </h1>
-          </div>
+      <!-- Breadcrumb -->
+      <nav class="mb-6 text-m text-gray-600 animate-slideInLeft flex flex-wrap items-center gap-2 overflow-hidden">
+        <a href="#" class="hover:text-blue-600 transition-colors">Home</a>
+        <span>></span>
+        <a href="#" class="hover:text-blue-600">AI-Enhanced Adaptive Signal Processing Lab
+</a>
+        <span>></span>
+
+        <a href="#" class="hover:text-blue-600">To simulate RLS and LMS algorithms on real bio-signal data</a>
+        <span>></span>
+
+
+        <span class="text-gray-800 font-medium">Aim </span>
+      </nav>
+
+      <!-- TITLE CARD -->
+      <div class="vl-card mb-4 overflow-hidden animate-fadeInUp rounded-lg">
+        <div class="px-4 py-3" style="background: linear-gradient(120deg, #021a2c, #064073, #0b60a8);">
+          <h1 class="text-lg md:text-xl font-bold text-white text-center leading-snug">
+           To simulate RLS and LMS algorithms on real bio-signal data
+          </h1>
         </div>
+      </div>
 
         <!-- Aim Section -->
         <section id="aim" class="section-content vl-card mb-8 p-6 animate-fadeInUp">
@@ -1317,8 +1506,8 @@
             </div>
 
             <div class="section-text text-gray-700 leading-relaxed text-lg">
-              <p>
-                To simulate RLS and LMS algorithms on Simulated and real bio-signal data.
+             <p>
+                To simulate RLS and LMS algorithms on real bio-signal data.
               </p>
             </div>
           </div>
@@ -1478,11 +1667,19 @@
     id="intro-modal"
     class="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
     data-intro-autoshow="once"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="intro-modal-title"
     style="display: none;"
   >
     <div class="modal-container bg-white rounded-2xl shadow-xl flex flex-col overflow-hidden">
-
-      <h3 class="px-4 pt-4">Introduction of DC Shunt Generator Load Characteristics</h3>
+      <div class="intro-header">
+        <div class="intro-title-row">
+          <span class="intro-title-chip">Guided Intro</span>
+          <h3 id="intro-modal-title">Introduction of DC Shunt Generator Load Characteristics</h3>
+        </div>
+        <p class="intro-subtitle">Review the experiment flow, then continue to the aim section when you are ready.</p>
+      </div>
 
       <div id="intro-grid" class="flex-1 w-full grid grid-cols-1 lg:grid-cols-[0.42fr_1.58fr] gap-3 mt-2 min-h-0 px-3 pb-3">
         <!-- LEFT PANEL -->
@@ -1521,7 +1718,7 @@
               id="intro-video"
               class="w-full object-contain"
               src="./videos/intro.mp4"
-              preload="auto"
+              preload="metadata"
               muted
               playsinline
             >
@@ -1584,20 +1781,46 @@
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('overlay');
     const toggleBtn = document.getElementById('mobile-menu-toggle');
+    const mobileSidebarQuery = window.matchMedia('(max-width: 1023px)');
+
+    function setSidebarOpen(isOpen) {
+      const shouldOpen = Boolean(isOpen) && mobileSidebarQuery.matches;
+      if (sidebar) sidebar.classList.toggle('-translate-x-full', !shouldOpen);
+      if (overlay) overlay.classList.toggle('hidden', !shouldOpen);
+      document.body.classList.toggle('overflow-hidden', shouldOpen);
+      document.body.classList.toggle('sidebar-open', shouldOpen);
+      if (toggleBtn) toggleBtn.setAttribute('aria-expanded', String(shouldOpen));
+
+      const chatbotWidget = document.querySelector('.chatbot-widget');
+      const chatbotPanel = chatbotWidget?.querySelector('.chatbot-panel');
+      const chatbotLauncher = chatbotWidget?.querySelector('.chatbot-launcher');
+      if (shouldOpen && chatbotWidget && chatbotPanel?.classList.contains('open')) {
+        chatbotPanel.classList.remove('open');
+        chatbotWidget.classList.remove('chatbot-open');
+        chatbotLauncher?.setAttribute('aria-expanded', 'false');
+      }
+    }
 
     if (toggleBtn) {
       toggleBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('-translate-x-full');
-        overlay.classList.toggle('hidden');
+        const isClosed = !sidebar || sidebar.classList.contains('-translate-x-full');
+        setSidebarOpen(isClosed);
       });
     }
 
     if (overlay) {
-      overlay.addEventListener('click', () => {
-        sidebar.classList.add('-translate-x-full');
-        overlay.classList.add('hidden');
-      });
+      overlay.addEventListener('click', () => setSidebarOpen(false));
     }
+
+    document.querySelectorAll('#sidebar a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (mobileSidebarQuery.matches) setSidebarOpen(false);
+      });
+    });
+
+    window.addEventListener('resize', () => {
+      if (!mobileSidebarQuery.matches) setSidebarOpen(false);
+    });
 
     // Smooth scrolling and show/hide sections for # links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -1622,10 +1845,7 @@
 
           targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-          if (overlay && !overlay.classList.contains('hidden')) {
-            sidebar.classList.add('-translate-x-full');
-            overlay.classList.add('hidden');
-          }
+          setSidebarOpen(false);
         }
       });
     });
@@ -1838,7 +2058,7 @@
 
       audioEl.pause();
       audioEl.currentTime = 0;
-      audioEl.load();
+      if (audioEl.readyState === 0) audioEl.load();
 
       if (introGrid) introGrid.classList.remove('final-state');
 
@@ -2138,6 +2358,7 @@
       }
 
       function scheduleAutoOpen() {
+        if (document.body.classList.contains('sidebar-open')) return;
         playNotification();
         if (!panel.classList.contains('open')) openPanel();
 
@@ -2202,13 +2423,27 @@
   const GENERAL_PROGRESS_KEYS = [
     "vlab_exp2_pretest_score",
     "vlab_exp2_pretest_total",
+    "vlab_exp2_pretest_attempted_ids",
+    "vlab_exp2_pretest_correct_ids",
     "vlab_exp2_pretest_updated_at",
     "vlab_exp2_posttest_score",
     "vlab_exp2_posttest_total",
+    "vlab_exp2_posttest_attempted_ids",
+    "vlab_exp2_posttest_correct_ids",
     "vlab_exp2_posttest_updated_at",
     "vlab_exp2_simulation_report_html",
     "vlab_exp2_simulation_report_updated_at"
   ];
+  const USER_PROGRESS_SUFFIXES = GENERAL_PROGRESS_KEYS.map((key) => key.replace(/^vlab_exp2_/, ""));
+  const RESET_LOCAL_STORAGE_KEYS = [
+    "vlab_exp2_user_input_draft"
+  ];
+  const RESET_SESSION_STORAGE_KEYS = [
+    "vlab_exp2_current_page",
+    "vlab_exp2_page_enter_ms",
+    "vlab_exp2_prompted_once"
+  ];
+  const WINDOW_NAME_PREFIX = "VLAB_EXP2::";
 
   function nowISO() { return new Date().toISOString(); }
   function normalizeEmail(email) {
@@ -2228,6 +2463,27 @@
     return `u${(hash >>> 0).toString(16).padStart(8, "0")}`;
   }
 
+  function loadWindowNameData() {
+    try {
+      if (typeof window.name === "string" && window.name.startsWith(WINDOW_NAME_PREFIX)) {
+        return safeJSONParse(window.name.slice(WINDOW_NAME_PREFIX.length), {});
+      }
+    } catch {}
+    return {};
+  }
+
+  function saveWindowNameData(data) {
+    try { window.name = WINDOW_NAME_PREFIX + JSON.stringify(data || {}); } catch {}
+  }
+
+  function setWindowNameValues(values) {
+    try {
+      const current = loadWindowNameData();
+      const merged = { ...(current && typeof current === "object" ? current : {}), ...(values || {}) };
+      saveWindowNameData(merged);
+    } catch {}
+  }
+
   function clearGeneralProgressKeys() {
     if (typeof localStorage === "undefined") return;
     try {
@@ -2236,6 +2492,31 @@
       }
     } catch {
       // ignore storage failures
+    }
+  }
+
+  function removeUserScopedProgress(userHash) {
+    if (!userHash || typeof localStorage === "undefined") return;
+    const prefix = `vlab_exp2_user_${userHash}_`;
+    try {
+      for (const suffix of USER_PROGRESS_SUFFIXES) {
+        localStorage.removeItem(prefix + suffix);
+      }
+    } catch {
+      // ignore storage failures
+    }
+  }
+
+  function hasUserScopedProgress(userHash) {
+    if (!userHash || typeof localStorage === "undefined") return false;
+    const prefix = `vlab_exp2_user_${userHash}_`;
+    try {
+      return USER_PROGRESS_SUFFIXES.some((suffix) => {
+        const value = localStorage.getItem(prefix + suffix);
+        return !!(value && String(value).trim());
+      });
+    } catch {
+      return false;
     }
   }
 
@@ -2466,15 +2747,35 @@
     // If user details are filled after completing parts of the experiment,
     // migrate the general keys into the user-scoped keys so the Progress Report
     // still shows the recorded results.
-    if (isNewUserByEmail && newHash) {
-      if (!prevHash) {
-        migrateGeneralProgressKeysToUser(newHash);
-      } else if (prevHash && prevHash !== newHash) {
+    if (newHash) {
+      const isSameEmail = prevHash && prevHash === newHash;
+      const shouldClearStaleScopedProgress =
+        !prevHash &&
+        isNewUserByEmail &&
+        hasUserScopedProgress(newHash);
+
+      if (isSameEmail) {
         clearGeneralProgressKeys();
       }
-    } else if (newHash) {
-      migrateGeneralProgressKeysToUser(newHash);
+
+      if (isSameEmail || shouldClearStaleScopedProgress) {
+        removeUserScopedProgress(newHash);
+      }
+
+      if (!isSameEmail) {
+        if (isNewUserByEmail && prevHash && prevHash !== newHash) {
+          clearGeneralProgressKeys();
+        }
+        migrateGeneralProgressKeysToUser(newHash);
+      }
     }
+
+    setWindowNameValues({
+      vlab_exp2_user_name: trimmedUser.name,
+      vlab_exp2_user_email: trimmedUser.email,
+      vlab_exp2_user_designation: trimmedUser.designation,
+      vlab_exp2_user_submitted_at: state.user.submittedAt
+    });
 
     saveState(state);
   }
@@ -2509,10 +2810,35 @@
   }
 
   function resetAll() {
+    let activeHash = "";
+    try { activeHash = localStorage.getItem("vlab_exp2_active_user_hash") || ""; } catch {}
+
     try { localStorage.removeItem(KEY); } catch {}
+    try { localStorage.removeItem("vlab_exp2_active_user_hash"); } catch {}
+    clearGeneralProgressKeys();
+    removeUserScopedProgress(activeHash);
+
     try {
-      sessionStorage.removeItem("vlab_exp2_current_page");
-      sessionStorage.removeItem("vlab_exp2_page_enter_ms");
+      for (const key of RESET_LOCAL_STORAGE_KEYS) {
+        localStorage.removeItem(key);
+      }
+    } catch {}
+
+    try {
+      for (const key of RESET_SESSION_STORAGE_KEYS) {
+        sessionStorage.removeItem(key);
+      }
+    } catch {}
+
+    try {
+      const wn = loadWindowNameData();
+      delete wn.vlab_exp2_user_name;
+      delete wn.vlab_exp2_user_email;
+      delete wn.vlab_exp2_user_designation;
+      delete wn.vlab_exp2_user_submitted_at;
+      delete wn.vlab_exp2_simulation_report_html;
+      delete wn.vlab_exp2_simulation_report_updated_at;
+      saveWindowNameData(wn);
     } catch {}
   }
 

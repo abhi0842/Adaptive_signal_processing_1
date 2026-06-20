@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Virtual Labs | Adaptive signal processing - Theory</title>
+  <title>Virtual Labs | Electrical Machines Lab - Theory</title>
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="./alert-theme.css">
@@ -419,6 +419,18 @@
       gap: 0.9rem;
       z-index: 90;
       max-width: calc(100vw - 32px);
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+
+    body.sidebar-open .chatbot-widget {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(12px);
+    }
+
+    @media (max-width: 1023px) {
+      #sidebar { z-index: 120 !important; }
+      #overlay { z-index: 110 !important; }
     }
 
     .chatbot-widget.chatbot-open .chatbot-hint-bubble,
@@ -562,13 +574,45 @@
       }
     }
 
+.mobile-break br{
+    display:none;
+}
+
+@media (max-width:640px){
+
+  .mobile-caption{
+      text-align:left !important;
+      font-weight:700 !important;
+  }
+
+  .mobile-caption b{
+      display:block;
+      text-align:center !important;
+      margin-bottom:10px;
+      font-weight:700 !important;
+  }
+
+  .mobile-break{
+      display:block;
+      text-align:left !important;
+      font-weight:700 !important;
+      line-height:1.8;
+      margin-top:0;
+  }
+
+  .mobile-break br{
+      display:block;
+  }
+
+}
+
   </style>
 </head>
 
 <body class="bg-gray-50 min-h-screen">
 
   <!-- HEADER -->
-    <header class="vl-header shadow-xl fixed top-0 left-0 right-0 z-50">
+    <header class="vl-header shadow-xl fixed top-0 left-0 right-0 z-[1000]">
     <div class="header-inner px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between py-1 w-full">
         <!-- Logo Section - Absolute Left Corner -->
@@ -591,6 +635,8 @@
           id="mobile-menu-toggle" 
           class="lg:hidden text-white p-2 menu-button"
           aria-label="Toggle menu"
+          aria-controls="sidebar"
+          aria-expanded="false"
         >
           <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -598,7 +644,7 @@
         </button>
 
         <!-- Desktop Navigation (Optional) -->
-         <nav class="top-nav hidden lg:flex items-center">
+         <nav class="top-nav hidden lg:flex items-center gap-2 lg:gap-3">
             <a href="../../main.html" class="nav-link">Home</a>
             <a href="user_input.html?return=theory.html" class="nav-link nav-user-link" data-user-input-link data-redirect-return="theory.html">
               <span class="nav-user-pill">
@@ -612,9 +658,9 @@
     </div>
   </header>
 
- <div class="flex pt-16 min-h-screen">
+ <div class="flex pt-[70px] min-h-screen">
     <!-- Sidebar -->
-    <aside id="sidebar" class="vl-sidebar w-64 fixed inset-y-0 left-0 z-40 overflow-y-auto transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out pt-20 lg:pt-6 pb-6">
+    <aside id="sidebar" class="vl-sidebar w-64 fixed left-0 top-[70px] bottom-12 z-[999] overflow-y-auto transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out pb-6">
       <div class="px-4">
         <h2 class="text-lg font-semibold text-gray-800 mb-6 border-b border-gray-200 pb-4">Experiment Navigation</h2>
         <nav class="space-y-1">
@@ -697,13 +743,20 @@
     <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden hidden"></div>
 
     <!-- MAIN CONTENT -->
-    <main class="flex-1 lg:ml-64 p-6">
+    <main class="flex-1 lg:ml-64 p-4 lg:p-6 overflow-x-hidden">
 
       <!-- Breadcrumb -->
-      <nav class="mb-6 text-m text-gray-600 animate-slideInLeft flex items-center space-x-2">
+      <nav class="mb-6 text-m text-gray-600 animate-slideInLeft flex flex-wrap items-center gap-2 overflow-hidden">
         <a href="#" class="hover:text-blue-600 transition-colors">Home</a>
-        <span>></span>Adaptive signal processing</a>
         <span>></span>
+        <a href="#" class="hover:text-blue-600">AI-Enhanced Adaptive Signal Processing Lab
+</a>
+        <span>></span>
+
+        <a href="#" class="hover:text-blue-600">To simulate RLS and LMS algorithms on real bio-signal data</a>
+        <span>></span>
+
+
         <span class="text-gray-800 font-medium">Theory</span>
       </nav>
 
@@ -711,86 +764,162 @@
       <div class="vl-card mb-4 overflow-hidden animate-fadeInUp rounded-lg">
         <div class="px-4 py-3" style="background: linear-gradient(120deg, #021a2c, #064073, #0b60a8);">
           <h1 class="text-lg md:text-xl font-bold text-white text-center leading-snug">
-            To study the theory of adaptive filters and their applications in biomedical signal processing
+           To simulate RLS and LMS algorithms on real bio-signal data
           </h1>
         </div>
       </div>
 
-      <!-- Theory Content -->
-<!-- ============================================================
-     PASTE THIS <style> BLOCK INTO YOUR <head>
-     (mirrors the DC shunt generator inline-style conventions)
-============================================================ -->
+<!-- Theory Content -->
 <style>
-  /* Equation blocks */
-  .eq {
-    text-align: center;
-    font-family: ui-monospace, 'Courier New', monospace;
-    font-size: 1rem;
-    background: #f3f4f6;   /* matches Tailwind bg-gray-100 */
-    padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
-    margin: 1.25rem 0;
-    color: #1f2937;
+.theory-section{
+    width:100%;
+    max-width:none;
+    margin:0 !important;
+    padding:0 15px !important;
+    font-family:Arial, Helvetica, sans-serif;
+    color:#222;
+    line-height:1.8;
+    font-size:1.1rem;
+    text-align:justify;
+}
+
+.theory-section{
+    padding-bottom:75px !important;
+}
+
+.theory-section h2{
+    font-size:2rem;
+    font-weight:700;
+    color:#222;
+    margin:24px 0 12px 0;
+    text-align:left;
+    word-spacing:normal;
+    letter-spacing:normal;
+    line-height:1.4;
+}
+
+.theory-section h2:first-child{
+    margin-top:0;
+}
+
+.theory-section p{
+    font-size:1.1rem;
+    margin:8px 0 12px 0;
+    line-height:1.8;
+    text-align:justify;
+    color:#000;
+}
+
+.theory-section ul{
+    list-style:disc !important;
+    list-style-position:outside !important;
+    padding-left:40px !important;
+    margin:12px 0 20px 0 !important;
+}
+
+.theory-section ol{
+    list-style:decimal !important;
+    list-style-position:outside !important;
+    padding-left:40px !important;
+    margin:12px 0 20px 0 !important;
+}
+
+.theory-section li{
+    display:list-item !important;
+    font-size:1.1rem;
+    margin-bottom:8px;
+    line-height:1.8;
+    color:#000;
+    text-align:justify;
+}
+
+.theory-section b{
+    font-weight:700;
+    color:#000;
+}
+
+.theory-section figure{
+    text-align:center;
+    margin:25px 0;
+}
+
+.theory-section img{
+    width:auto;
+    max-width:100% !important;
+    height:auto !important;
+    display:block;
+    margin:auto;
+}
+
+.theory-section figcaption{
+    font-size:1rem;
+    font-weight:700;
+    color:#000;
+    margin-top:10px;
+    text-align:center;
+}
+
+@media (max-width:640px){
+
+  .theory-section h2{
+      font-size:1.8rem;
+      line-height:1.35;
+      word-spacing:0 !important;
+      text-align:left !important;
   }
 
-  /* Note / Important callout */
-  .note-box {
-    background: #eff6ff;
-    border-left: 4px solid #1d4ed8;
-    padding: 0.85rem 1.1rem;
-    border-radius: 0.5rem;
-    margin: 1.25rem 0;
-    font-size: 1rem;
-    line-height: 1.65;
-    color: #1e3a5f;
-  }
-  .note-box strong {
-    display: block;
-    margin-bottom: 0.35rem;
-    font-size: 1rem;
-    color: #1d4ed8;
-  }
 
-  /* Tables */
-  .af-table {
-    border-collapse: collapse;
-    width: 100%;
-    margin: 1.25rem 0;
-    font-size: 0.95rem;
-  }
-  .af-table th,
-  .af-table td {
-    border: 1px solid #d1d5db;  /* gray-300 */
-    padding: 0.65rem 0.85rem;
-    vertical-align: top;
-  }
-  .af-table th {
-    background: linear-gradient(120deg, #021a2c, #064073, #0b60a8);
-    color: #fff;
-    text-align: center;
-    font-weight: 600;
-  }
-  .af-table td:first-child {
-    font-weight: 600;
-    width: 30%;
-    color: #374151;
-  }
-  .af-table tr:nth-child(even) td {
-    background: #f9fafb;
-  }
+  /* =========================
+   MOBILE FULL WIDTH FIX
+   ========================= */
+
+html,
+body{
+    width:100%;
+    max-width:100%;
+    overflow-x:hidden;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+main{
+    overflow-x:hidden;
+}
+
+.theory-section{
+    width:100%;
+    max-width:100%;
+    overflow-x:hidden;
+    word-wrap:break-word;
+    overflow-wrap:break-word;
+}
+
+.theory-section img{
+    max-width:100% !important;
+    height:auto !important;
+    display:block;
+}
+
+.theory-section p,
+.theory-section li,
+.theory-section h2,
+.theory-section figcaption{
+    overflow-wrap:anywhere;
+    word-break:break-word;
+}
+
+nav{
+    overflow-x:hidden;
+}
+
+}
 </style>
 
+<div class="theory-section">
+ <!-- ── 1. Introduction ─────────────────────────────── -->
 
-<!-- ============================================================
-     THE SECTION — drop this wherever your theory tab renders
-============================================================ -->
-<section class="section-content vl-card p-6 animate-fadeInUp">
-
-  <div class="space-y-8 text-gray-700 text-lg leading-relaxed">
-
-    <!-- ── 1. Introduction ─────────────────────────────── -->
-    <div>
       <h3 class="text-xl font-semibold mb-4 text-gray-800">1. Introduction to Adaptive Filters</h3>
 
       <p class="mb-6 text-justify">
@@ -1289,20 +1418,50 @@
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('overlay');
     const toggleBtn = document.getElementById('mobile-menu-toggle');
+    const mobileSidebarQuery = window.matchMedia('(max-width: 1023px)');
 
-    toggleBtn.addEventListener('click', () => {
-      sidebar.classList.toggle('-translate-x-full');
-      overlay.classList.toggle('hidden');
+    function setSidebarOpen(isOpen) {
+      const shouldOpen = Boolean(isOpen) && mobileSidebarQuery.matches;
+      if (sidebar) sidebar.classList.toggle('-translate-x-full', !shouldOpen);
+      if (overlay) overlay.classList.toggle('hidden', !shouldOpen);
+      document.body.classList.toggle('overflow-hidden', shouldOpen);
+      document.body.classList.toggle('sidebar-open', shouldOpen);
+      if (toggleBtn) toggleBtn.setAttribute('aria-expanded', String(shouldOpen));
+
+      const chatbotWidget = document.querySelector('.chatbot-widget');
+      const chatbotPanel = chatbotWidget?.querySelector('.chatbot-panel');
+      const chatbotLauncher = chatbotWidget?.querySelector('.chatbot-launcher');
+      if (shouldOpen && chatbotWidget && chatbotPanel?.classList.contains('open')) {
+        chatbotPanel.classList.remove('open');
+        chatbotWidget.classList.remove('chatbot-open');
+        chatbotLauncher?.setAttribute('aria-expanded', 'false');
+      }
+    }
+
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', () => {
+        const isClosed = !sidebar || sidebar.classList.contains('-translate-x-full');
+        setSidebarOpen(isClosed);
+      });
+    }
+
+    if (overlay) {
+      overlay.addEventListener('click', () => setSidebarOpen(false));
+    }
+
+    document.querySelectorAll('#sidebar a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (mobileSidebarQuery.matches) setSidebarOpen(false);
+      });
     });
 
-    overlay.addEventListener('click', () => {
-      sidebar.classList.add('-translate-x-full');
-      overlay.classList.add('hidden');
+    window.addEventListener('resize', () => {
+      if (!mobileSidebarQuery.matches) setSidebarOpen(false);
     });
   </script>
 
   <div class="chatbot-widget">
-    <div class="chatbot-panel" data-chat-url="https://electrical-machine-exp-2.netlify.app/"
+    <div class="chatbot-panel" data-chat-url="https://electrical-machine-exp-2.netlify.app/">
       <div class="chatbot-panel-header">
         <div>
           <p class="chatbot-panel-title">Virtual Lab Assistant</p>
@@ -1330,7 +1489,7 @@
   </div>
 
   <audio id="chatbot-notification-audio" preload="auto">
-    <source src="live-chat-353605.mp3" type="audio/mpeg">
+    <source src="./audio/live-chat-353605.mp3" type="audio/mpeg">
   </audio>
 
   <script>
@@ -1354,7 +1513,28 @@
 
       let isLoaded = false;
       let autoCloseTimer = null;
- 
+
+      function playNotification() {
+        if (!notifyAudio) return;
+        try {
+          const maybePromise = notifyAudio.play();
+          if (maybePromise && typeof maybePromise.catch === 'function') {
+            maybePromise.catch(function () {});
+          }
+        } catch (e) {}
+      }
+
+      function scheduleAutoOpen() {
+        if (document.body.classList.contains('sidebar-open')) return;
+        playNotification();
+        if (!panel.classList.contains('open')) openPanel();
+
+        if (autoCloseTimer) clearTimeout(autoCloseTimer);
+        autoCloseTimer = setTimeout(function () {
+          if (panel.classList.contains('open')) closePanel();
+        }, 3000);
+      }
+
       function openPanel() {
         panel.classList.add('open');
         toggleBtn.setAttribute('aria-expanded', 'true');
